@@ -10,7 +10,7 @@ function App() {
             <div className='flex items-center'>
               <CubeIcon className='h-16 w-16 inline-block' />
               <h1 className='text-4xl font-semibold text-gray-900 mb-4 ml-4 mt-4'>
-                Memory lane
+                Dan's Memory lane
               </h1>
             </div>
           </div>
