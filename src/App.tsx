@@ -3,10 +3,11 @@ import Card from './components/shared/Card.tsx'
 import H1 from './components/shared/H1.tsx'
 import AppLogo from './components/shared/AppLogo.tsx'
 import Container from './components/shared/Container.tsx'
-import { PlusIcon, ShareIcon } from '@heroicons/react/20/solid'
+import { EllipsisVerticalIcon, PlusIcon, ShareIcon } from '@heroicons/react/20/solid'
 import IconButton from './components/shared/IconButton.tsx'
 import { Select, SelectItem } from '@heroui/select'
 import { Button } from '@heroui/button'
+import MemoryTile from './components/MemoryTile.tsx'
 
 function App() {
   return (
@@ -47,6 +48,13 @@ function App() {
         >
           New memory
         </Button>
+      </div>
+
+      <div className='max-w-lg m-auto space-y-4'>
+        {/*<MemoryTile />*/}
+        {/*<div className='flex justify-center items-center'>*/}
+        {/*  <EllipsisVerticalIcon className='h-6 w-6 text-gray-500' />*/}
+        {/*</div>*/}
       </div>
     </Container>
   )
