@@ -1,22 +1,21 @@
 import React from 'react'
 import classNames from 'classnames'
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'outlined' | 'filled' | 'text'
   size?: 'sm' | 'md' | 'lg'
-  disabled?: boolean
-  onClick?: () => void
-  children: React.ReactNode
 }
 
 const Button: React.FC<ButtonProps> = ({
   variant = 'outlined',
   size = 'md',
   disabled = false,
-  onClick,
   children,
+  className,
+  ...props
 }) => {
-  const baseStyles = 'rounded focus:outline-none focus:ring-2 focus:ring-offset-2'
+  const baseStyles =
+    'rounded-lg focus:outline-none'
   const variantStyles = {
     outlined: 'border border-gray-300 text-gray-700 bg-white hover:bg-gray-50',
     filled: 'bg-blue-600 text-white hover:bg-blue-700',
@@ -33,11 +32,12 @@ const Button: React.FC<ButtonProps> = ({
     baseStyles,
     variantStyles[variant],
     sizeStyles[size],
-    { [disabledStyles]: disabled }
+    { [disabledStyles]: disabled },
+    className,
   )
 
   return (
-    <button className={classes} onClick={onClick} disabled={disabled}>
+    <button className={classes} disabled={disabled} {...props}>
       {children}
     </button>
   )
