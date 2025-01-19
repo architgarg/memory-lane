@@ -7,7 +7,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Card: React.FC<CardProps> = ({ children, className, ...props }) => {
   const defaultPadding = 'p-4'
-  const shadowClass = 'shadow-lg rounded-lg bg-white'
+  const shadowClass = 'shadow rounded-lg bg-white'
 
   const classes = classNames(defaultPadding, shadowClass, className)
 
