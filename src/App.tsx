@@ -5,11 +5,13 @@ import AppLogo from './components/shared/AppLogo.tsx'
 import Container from './components/shared/Container.tsx'
 import { ShareIcon } from '@heroicons/react/20/solid'
 import IconButton from './components/shared/IconButton.tsx'
+import Button from './components/shared/Button.tsx'
+import { Select, SelectItem } from '@heroui/select'
 
 function App() {
   return (
-    <Container className='mt-20'>
-      <div className='flex justify-between items-center mb-10'>
+    <Container className='mt-20 space-y-20'>
+      <div className='flex justify-between items-center'>
         <div className='flex items-center'>
           <AppLogo />
           <H1>Dan's Memory lane</H1>
@@ -26,6 +28,21 @@ function App() {
         challenges and cherishing relationships, Jae continues to craft a unique
         and inspiring life history.
       </Card>
+
+      <div className='flex items-center justify-between'>
+        <Select
+          className='max-w-[200px]'
+          variant='bordered'
+          onChange={(e) => console.log(e.target.value)}
+          aria-label='Sort memories'
+          defaultSelectedKeys={['desc']}
+        >
+          <SelectItem key='asc'>Older to new</SelectItem>
+          <SelectItem key='desc'>New to older</SelectItem>
+        </Select>
+
+        <Button>New memory</Button>
+      </div>
     </Container>
   )
 }

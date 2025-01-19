@@ -12,8 +12,12 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
+    "@heroui/select": "^2.4.10",
+    "@heroui/system": "^2.4.7",
+    "@heroui/theme": "^2.4.6",
     "classnames": "^2.5.1",
     "express": "^4.18.2",
+    "framer-motion": "^11.18.1",
     "prettier": "^3.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
