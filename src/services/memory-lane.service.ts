@@ -4,19 +4,15 @@ import { MemoryLane } from '../models/memory-lane.ts'
 
 class MemoryLanesService extends ApiClient {
 
-  async getMemoryLanes() {
-    return this.get<{ memoryLanes: MemoryLane[] }>(MEMORY_LANES)
-  }
-
-  async getMemoryLaneById(id: number) {
+  async getById(id: string) {
     return this.get<{ memoryLane: MemoryLane }>(`${MEMORY_LANES}/${id}`)
   }
 
-  async createMemoryLane(user_name: string, slug: string, description: string) {
+  async create(user_name: string, slug: string, description: string) {
     return this.post(MEMORY_LANES, { user_name, slug, description })
   }
 
-  async updateMemoryLane(
+  async update(
     id: number,
     user_name: string,
     slug: string,
@@ -29,9 +25,9 @@ class MemoryLanesService extends ApiClient {
     })
   }
 
-  async deleteMemoryLane(id: number) {
+  async deleteById(id: number) {
     return this.delete(`${MEMORY_LANES}/${id}`)
   }
 }
 
-export default MemoryLanesService
+export const memoryLanesService = new MemoryLanesService()

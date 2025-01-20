@@ -1,10 +1,10 @@
 import ApiClient from './api-client.ts'
 import { MEMORIES } from '../constants/api-urls'
-import { MemoryLane } from '../models/memory-lane'
+import { Memory } from '../models/memory.ts'
 
 class MemoriesService extends ApiClient {
-  async getMemoryById(id: number) {
-    return this.get<{ memory: MemoryLane }>(`${MEMORIES}/${id}`)
+  async getByMemoryLaneId(id: string) {
+    return this.get<{ memories: Memory[] }>(`${MEMORIES}/${id}`)
   }
 
   async createMemory(

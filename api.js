@@ -1,10 +1,12 @@
 import express from 'express'
 import sqlite3 from 'sqlite3'
+import cors from 'cors'
 
 const app = express()
 const port = 4001
 const db = new sqlite3.Database('memories.db')
 
+app.use(cors())
 app.use(express.json())
 
 db.serialize(() => {
@@ -151,37 +153,50 @@ app.post('/memories', (req, res) => {
   const stmt = db.prepare(
     'INSERT INTO memories (memory_lane_id, title, description, timestamp, images) VALUES (?, ?, ?, ?, ?)',
   )
-  stmt.run(memory_lane_id, title, description, timestamp, images, function (err) {
-    if (err) {
-      res.status(500).json({ error: err.message })
-      return
-    }
-    res.status(201).json({
-      memory: {
-        id: this.lastID,
-        memory_lane_id,
-        title,
-        description,
-        timestamp,
-        images,
-      },
-    })
-  })
+  stmt.run(
+    memory_lane_id,
+    title,
+    description,
+    timestamp,
+    images,
+    function (err) {
+      if (err) {
+        res.status(500).json({ error: err.message })
+        return
+      }
+      res.status(201).json({
+        memory: {
+          id: this.lastID,
+          memory_lane_id,
+          title,
+          description,
+          timestamp,
+          images,
+        },
+      })
+    },
+  )
 })
 
-app.get('/memories/:id', (req, res) => {
-  const { id } = req.params
-  db.get('SELECT * FROM memories WHERE id = ?', [id], (err, row) => {
-    if (err) {
-      res.status(500).json({ error: err.message })
-      return
-    }
-    if (!row) {
-      res.status(404).json({ error: 'Memory not found' })
-      return
-    }
-    res.json({ memory: row })
-  })
+app.get('/memories/:memory_lane_id', (req, res) => {
+  const { memory_lane_id } = req.params
+  db.all(
+    'SELECT * FROM memories WHERE memory_lane_id = ?',
+    [memory_lane_id],
+    (err, rows) => {
+      if (err) {
+        res.status(500).json({ error: err.message })
+        return
+      }
+      if (rows.length === 0) {
+        res
+          .status(404)
+          .json({ error: 'No memories found for this memory lane' })
+        return
+      }
+      res.json({ memories: rows })
+    },
+  )
 })
 
 app.put('/memories/:id', (req, res) => {
