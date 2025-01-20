@@ -1,21 +1,23 @@
 import ApiClient from './api-client.ts'
 import { MEMORIES } from '../constants/api-urls'
-import { Memory } from '../models/memory.ts'
+import { Memory, MemoryLane } from '@prisma/client'
 
 class MemoriesService extends ApiClient {
-  async getByMemoryLaneId(id: string) {
-    return this.get<{ memories: Memory[] }>(`${MEMORIES}/${id}`)
+  async getByMemoryLaneSlug(memoryLaneSlug: string) {
+    return this.get<{ memoryLane: MemoryLane; memories: Memory[] }>(
+      `${MEMORIES}/${memoryLaneSlug}`,
+    )
   }
 
   async createMemory(
-    memory_lane_id: number,
+    memoryLaneSlug: string,
     title: string,
     description: string,
     timestamp: string,
-    images: string,
+    images: string[],
   ) {
     return this.post(MEMORIES, {
-      memory_lane_id,
+      memoryLaneSlug,
       title,
       description,
       timestamp,
@@ -25,14 +27,14 @@ class MemoriesService extends ApiClient {
 
   async updateMemory(
     id: number,
-    memory_lane_id: number,
+    memoryLaneSlug: string,
     title: string,
     description: string,
     timestamp: string,
-    images: string,
+    images: string[],
   ) {
     return this.put(`${MEMORIES}/${id}`, {
-      memory_lane_id,
+      memoryLaneSlug,
       title,
       description,
       timestamp,
