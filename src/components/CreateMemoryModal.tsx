@@ -1,8 +1,8 @@
-import { PlusIcon } from '@heroicons/react/20/solid'
-import { XMarkIcon } from '@heroicons/react/20/solid'
+import { PlusIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import {
   Button,
   DatePicker,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -10,16 +10,15 @@ import {
   ModalFooter,
   ModalHeader,
   Textarea,
-  Image,
 } from '@heroui/react'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useMemo, useState } from 'react'
 import { memoriesService } from '../services/memory.service.ts'
+import { imageUploadService } from '../services/file.service.ts'
 
 interface FormData {
   title: string
   description: string
   timestamp: string
-  images: string[]
 }
 
 interface Props {
@@ -39,23 +38,21 @@ export default function CreateMemoryModal({
     title: '',
     description: '',
     timestamp: '',
-    images: [],
   })
+  const [uploading, setUploading] = useState<boolean>(false)
+  const [pickedImageFiles, setPickedImageFiles] = useState<File[]>([])
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
-    const imageUrls = files.map((file) => URL.createObjectURL(file))
-    setData((oldData) => ({
-      ...oldData,
-      images: [...oldData.images, ...imageUrls],
-    }))
+    setPickedImageFiles((oldFiles) => [...oldFiles, ...files])
   }
 
+  const previewImageUrls = useMemo(() => {
+    return pickedImageFiles.map((file) => URL.createObjectURL(file))
+  }, [pickedImageFiles])
+
   const handleDeleteImage = (index: number) => {
-    setData((oldData) => ({
-      ...oldData,
-      images: oldData.images.filter((_, i) => i !== index),
-    }))
+    setPickedImageFiles((oldFiles) => oldFiles.filter((_, i) => i !== index))
   }
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -67,12 +64,23 @@ export default function CreateMemoryModal({
   }
 
   const createMemory = async () => {
+    if (uploading) return
+
+    setUploading(true)
+    const uploadedImageUrls = await Promise.all(
+      pickedImageFiles.map(async (file) => {
+        return imageUploadService.upload(file)
+      }),
+    ).finally(() => {
+      setUploading(false)
+    })
+
     await memoriesService.createMemory(
       slug,
       data.title,
       data.description,
       data.timestamp,
-      data.images,
+      uploadedImageUrls,
     )
 
     onSuccess()
@@ -123,13 +131,13 @@ export default function CreateMemoryModal({
                   }}
                 />
 
-                {data.images.length > 0 && (
+                {previewImageUrls.length > 0 && (
                   <div className='mt-2'>
                     <label className='text-small text-foreground-700 mb-2 block'>
                       Selected Images
                     </label>
                     <div className='grid grid-cols-4 gap-4'>
-                      {data.images.map((image, index) => (
+                      {previewImageUrls.map((image, index) => (
                         <div key={index} className='relative group'>
                           <Image
                             alt={`Image ${index + 1}`}
@@ -164,8 +172,12 @@ export default function CreateMemoryModal({
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button color='primary' onPress={createMemory}>
-                  Create memory
+                <Button
+                  color='primary'
+                  onPress={createMemory}
+                  disabled={uploading}
+                >
+                  {uploading ? 'Uploading images...' : 'Create memory'}
                 </Button>
               </ModalFooter>
             </>

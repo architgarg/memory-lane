@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios'
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { BASEURL } from '../constants/api-urls.ts'
 
 class ApiClient {
@@ -18,8 +18,12 @@ class ApiClient {
     return response.data
   }
 
-  protected async post<T>(url: string, data: unknown): Promise<T> {
-    const response = await this.client.post(url, data)
+  protected async post<T>(
+    url: string,
+    data: unknown,
+    config?: AxiosRequestConfig,
+  ): Promise<T> {
+    const response = await this.client.post(url, data, config)
     return response.data
   }
 
