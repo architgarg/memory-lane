@@ -11,7 +11,7 @@ import IconButton from './shared/IconButton.tsx'
 import { Select, SelectItem } from '@heroui/select'
 import { Button } from '@heroui/button'
 import MemoryTile from './MemoryTile.tsx'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { memoriesService } from '../services/memory.service.ts'
 import { Memory, MemoryLane } from '@prisma/client'
 
@@ -22,6 +22,9 @@ interface Props {
 function MemoryPage({ slug }: Props) {
   const [memories, setMemories] = useState<Memory[]>([])
   const [memoryLane, setMemoryLane] = useState<MemoryLane>()
+  const [memoriesSortOrder, setMemoriesSortOrder] = useState<'desc' | 'asc'>(
+    'desc',
+  )
 
   useEffect(() => {
     if (!slug) return
@@ -38,7 +41,7 @@ function MemoryPage({ slug }: Props) {
   }, [slug])
 
   return (
-    <Container className='mt-20 space-y-16'>
+    <Container className='mt-20 space-y-16 mb-40'>
       <div className='flex justify-between items-center'>
         <div className='flex items-center'>
           <AppLogo />
@@ -54,9 +57,11 @@ function MemoryPage({ slug }: Props) {
         <Select
           className='max-w-[200px]'
           variant='bordered'
-          onChange={(e) => console.log(e.target.value)}
+          onChange={(e) =>
+            setMemoriesSortOrder(e.target.value as unknown as 'desc' | 'asc')
+          }
           aria-label='Sort memories'
-          defaultSelectedKeys={['desc']}
+          defaultSelectedKeys={[memoriesSortOrder]}
         >
           <SelectItem key='asc'>Older to new</SelectItem>
           <SelectItem key='desc'>New to older</SelectItem>
@@ -71,16 +76,23 @@ function MemoryPage({ slug }: Props) {
       </div>
 
       <div className='max-w-lg m-auto space-y-4'>
-        {memories.map((memory, index) => (
-          <>
-            <MemoryTile key={memory.id} memory={memory} />
-            {index < memories.length && (
-              <div className='flex justify-center items-center'>
-                <EllipsisVerticalIcon className='h-6 w-6 text-gray-500' />
-              </div>
-            )}
-          </>
-        ))}
+        {memories
+          .sort(
+            (a, b) =>
+              (memoriesSortOrder === 'asc' ? 1 : -1) *
+              (new Date(a.timestamp).getTime() -
+                new Date(b.timestamp).getTime()),
+          )
+          .map((memory, index) => (
+            <Fragment key={memory.id}>
+              <MemoryTile memory={memory} />
+              {index < memories.length - 1 && (
+                <div className='flex justify-center items-center'>
+                  <EllipsisVerticalIcon className='h-6 w-6 text-gray-500' />
+                </div>
+              )}
+            </Fragment>
+          ))}
       </div>
     </Container>
   )
