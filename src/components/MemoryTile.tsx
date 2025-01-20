@@ -1,7 +1,5 @@
 import React from 'react'
-import { Card, CardFooter, CardHeader } from '@heroui/card'
-import { Image } from '@heroui/Image'
-import { Button } from '@heroui/button'
+import { Card, CardFooter, CardHeader, Image, Button } from '@heroui/react'
 import { Memory } from '@prisma/client'
 
 interface Props {
@@ -19,7 +17,7 @@ const MemoryTile: React.FC<Props> = ({ memory }) => {
       </CardHeader>
       <Image
         removeWrapper
-        alt='Relaxing app background'
+        alt='Memory Image'
         className='z-0 w-full h-full object-cover'
         src={memory.images[0]}
       />
@@ -27,7 +25,7 @@ const MemoryTile: React.FC<Props> = ({ memory }) => {
         <p className='text-tiny text-white/90 line-clamp-2'>
           {memory.description}
         </p>
-        <Button radius='full' size='sm' color="primary">
+        <Button radius='full' size='sm' color='primary'>
           View
         </Button>
       </CardFooter>
