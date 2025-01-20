@@ -9,9 +9,12 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
 
-    "db:init": "npx prisma migrate dev --name init --schema=backend/schema.prisma",
-    "db:generate": "npx prisma generate --schema backend/schema.prisma",
+    "migrate:dev": "npx prisma migrate dev",
+    "db:generate": "npx prisma generate",
     "serve:api": "nodemon backend/api.js"
+  },
+  "prisma": {
+    "schema": "backend/schema.prisma"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",

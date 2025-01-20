@@ -1,12 +1,10 @@
--- CreateTable
-CREATE TABLE "MemoryLane" (
+CREATE TABLE IF NOT EXISTS "MemoryLane" (
     "slug" TEXT NOT NULL PRIMARY KEY,
     "user_name" TEXT NOT NULL,
     "description" TEXT NOT NULL
 );
 
--- CreateTable
-CREATE TABLE "Memory" (
+CREATE TABLE IF NOT EXISTS "Memory" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "memory_lane_slug" TEXT NOT NULL,
     "title" TEXT NOT NULL,
