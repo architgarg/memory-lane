@@ -16,6 +16,8 @@ import { memoriesService } from '../services/memory.service.ts'
 import { Memory, MemoryLane } from '@prisma/client'
 import toast from 'react-hot-toast'
 import { copyToClipboard } from '../utils.ts'
+import { useDisclosure } from '@heroui/react'
+import CreateMemoryModal from './CreateMemoryModal.tsx'
 
 interface Props {
   slug: string
@@ -27,6 +29,7 @@ function MemoryPage({ slug }: Props) {
   const [memoriesSortOrder, setMemoriesSortOrder] = useState<'desc' | 'asc'>(
     'desc',
   )
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   useEffect(() => {
     if (!slug) return
@@ -62,6 +65,7 @@ function MemoryPage({ slug }: Props) {
 
   return (
     <Container className='mt-20 space-y-16 mb-40'>
+      <CreateMemoryModal isOpen={isOpen} onOpenChange={onOpenChange} />
       <div className='flex justify-between items-center'>
         <div className='flex items-center'>
           <AppLogo />
@@ -90,6 +94,7 @@ function MemoryPage({ slug }: Props) {
         <Button
           variant='bordered'
           startContent={<PlusIcon className='h-6 w-6' />}
+          onPress={onOpen}
         >
           New memory
         </Button>
