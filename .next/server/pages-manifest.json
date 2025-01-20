@@ -2,6 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/[memory_slug]": "pages/[memory_slug].js",
+  "/[slug]": "pages/[slug].js",
   "/api/memories/[id]": "pages/api/memories/[id].js"
 }
