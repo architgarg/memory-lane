@@ -1,4 +1,4 @@
-export const BASEURL = 'http://localhost:4001'
+export const BASEURL = '/api'
 
 export const MEMORIES = '/memories'
 export const MEMORY_LANES = '/memory-lanes'
