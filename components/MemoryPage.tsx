@@ -11,9 +11,10 @@ import IconButton from './shared/IconButton.tsx'
 import { Select, SelectItem } from '@heroui/select'
 import { Button } from '@heroui/button'
 import MemoryTile from './MemoryTile.tsx'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { memoriesService } from '../services/memory.service.ts'
 import { Memory, MemoryLane } from '@prisma/client'
+import toast from 'react-hot-toast'
 
 interface Props {
   slug: string
@@ -40,6 +41,19 @@ function MemoryPage({ slug }: Props) {
     fetchMemories()
   }, [slug])
 
+  const copyShareLink = () => {
+    navigator.clipboard.writeText(window.location.href)
+    toast.success('Link copied to clipboard')
+  }
+
+  const sortedMemories = useMemo(() => {
+    return memories.sort(
+      (a, b) =>
+        (memoriesSortOrder === 'asc' ? 1 : -1) *
+        (new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()),
+    )
+  }, [memories, memoriesSortOrder])
+
   return (
     <Container className='mt-20 space-y-16 mb-40'>
       <div className='flex justify-between items-center'>
@@ -48,7 +62,7 @@ function MemoryPage({ slug }: Props) {
           <H1>{memoryLane?.user_name}'s Memory lane</H1>
         </div>
 
-        <IconButton icon={ShareIcon} />
+        <IconButton icon={ShareIcon} onClick={copyShareLink} />
       </div>
 
       <Card>{memoryLane?.description}</Card>
@@ -76,23 +90,16 @@ function MemoryPage({ slug }: Props) {
       </div>
 
       <div className='max-w-lg m-auto space-y-4'>
-        {memories
-          .sort(
-            (a, b) =>
-              (memoriesSortOrder === 'asc' ? 1 : -1) *
-              (new Date(a.timestamp).getTime() -
-                new Date(b.timestamp).getTime()),
-          )
-          .map((memory, index) => (
-            <Fragment key={memory.id}>
-              <MemoryTile memory={memory} />
-              {index < memories.length - 1 && (
-                <div className='flex justify-center items-center'>
-                  <EllipsisVerticalIcon className='h-6 w-6 text-gray-500' />
-                </div>
-              )}
-            </Fragment>
-          ))}
+        {sortedMemories.map((memory, index) => (
+          <Fragment key={memory.id}>
+            <MemoryTile memory={memory} />
+            {index < memories.length - 1 && (
+              <div className='flex justify-center items-center'>
+                <EllipsisVerticalIcon className='h-6 w-6 text-gray-500' />
+              </div>
+            )}
+          </Fragment>
+        ))}
       </div>
     </Container>
   )
