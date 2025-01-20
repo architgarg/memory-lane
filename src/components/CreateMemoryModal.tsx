@@ -157,8 +157,8 @@ export default function CreateMemoryModal({
                   </div>
                 )}
 
-                <div className='duration-150 hover:border-default-400 border-default-200 border-medium focus-within:border-default-foreground focus-within:hover:border-default-foreground p-4 mt-4 rounded-lg cursor-pointer'>
-                  <label className='flex gap-2 justify-center items-center w-full text-small text-foreground-700 cursor-pointer'>
+                <div className='duration-150 hover:border-default-400 border-default-200 border-medium focus-within:border-default-foreground focus-within:hover:border-default-foreground mt-4 rounded-lg cursor-pointer'>
+                  <label className='flex gap-2 justify-center items-center w-full text-small text-foreground-700 cursor-pointer p-4'>
                     <PlusIcon className='h-6 w-6 text-default-500' />
                     Pick memories from gallery
                     <input
