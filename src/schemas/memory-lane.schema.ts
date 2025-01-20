@@ -5,3 +5,5 @@ export const memoryLaneSchema = z.object({
   slug: z.string(),
   description: z.string(),
 })
+
+export type MemoryLaneSchema = z.infer<typeof memoryLaneSchema>

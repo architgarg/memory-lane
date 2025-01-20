@@ -13,23 +13,70 @@ import {
   Image,
 } from '@heroui/react'
 import { ChangeEvent, useState } from 'react'
+import { memoriesService } from '../services/memory.service.ts'
 
-interface Props {
-  isOpen: boolean
-  onOpenChange: (isOpen: boolean) => void
+interface FormData {
+  title: string
+  description: string
+  timestamp: string
+  images: string[]
 }
 
-export default function CreateMemoryModal({ isOpen, onOpenChange }: Props) {
-  const [selectedImages, setSelectedImages] = useState<string[]>([])
+interface Props {
+  slug: string
+  isOpen: boolean
+  onOpenChange: (isOpen: boolean) => void
+  onSuccess: () => void
+}
+
+export default function CreateMemoryModal({
+  slug,
+  isOpen,
+  onOpenChange,
+  onSuccess,
+}: Props) {
+  const [data, setData] = useState<FormData>({
+    title: '',
+    description: '',
+    timestamp: '',
+    images: [],
+  })
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
     const imageUrls = files.map((file) => URL.createObjectURL(file))
-    setSelectedImages((oldImageUrls) => [...oldImageUrls, ...imageUrls])
+    setData((oldData) => ({
+      ...oldData,
+      images: [...oldData.images, ...imageUrls],
+    }))
   }
 
   const handleDeleteImage = (index: number) => {
-    setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index))
+    setData((oldData) => ({
+      ...oldData,
+      images: oldData.images.filter((_, i) => i !== index),
+    }))
+  }
+
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setData((oldData) => ({
+      ...oldData,
+      [name]: value,
+    }))
+  }
+
+  const createMemory = async () => {
+    await memoriesService.createMemory(
+      slug,
+      data.title,
+      data.description,
+      data.timestamp,
+      data.images,
+    )
+
+    onSuccess()
+    onOpenChange(false)
   }
 
   return (
@@ -42,33 +89,47 @@ export default function CreateMemoryModal({ isOpen, onOpenChange }: Props) {
         onOpenChange={onOpenChange}
       >
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalHeader className='flex flex-col gap-1'>
                 Create a new Memory
               </ModalHeader>
               <ModalBody>
                 <Input
-                  name='name'
+                  name='title'
                   label='Name'
                   placeholder='Name your memory'
                   variant='bordered'
+                  value={data.title}
+                  onChange={onChangeHandler}
                 />
                 <Textarea
                   name='description'
                   label='Description'
                   placeholder='Enter your memory description'
                   variant='bordered'
+                  value={data.description}
+                  onChange={onChangeHandler}
                 />
-                <DatePicker name='date' label='Date' variant='bordered' />
+                <DatePicker
+                  name='timestamp'
+                  label='Date'
+                  variant='bordered'
+                  onChange={(date) => {
+                    setData((oldData) => ({
+                      ...oldData,
+                      timestamp: date?.toDate('IST')?.toISOString() || '',
+                    }))
+                  }}
+                />
 
-                {selectedImages.length > 0 && (
+                {data.images.length > 0 && (
                   <div className='mt-2'>
                     <label className='text-small text-foreground-700 mb-2 block'>
                       Selected Images
                     </label>
                     <div className='grid grid-cols-4 gap-4'>
-                      {selectedImages.map((image, index) => (
+                      {data.images.map((image, index) => (
                         <div key={index} className='relative group'>
                           <Image
                             alt={`Image ${index + 1}`}
@@ -103,7 +164,7 @@ export default function CreateMemoryModal({ isOpen, onOpenChange }: Props) {
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button color='primary' onPress={onClose}>
+                <Button color='primary' onPress={createMemory}>
                   Create memory
                 </Button>
               </ModalFooter>

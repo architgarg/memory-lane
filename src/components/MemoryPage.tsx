@@ -11,7 +11,7 @@ import IconButton from './shared/IconButton.tsx'
 import { Select, SelectItem } from '@heroui/select'
 import { Button } from '@heroui/button'
 import MemoryTile from './MemoryTile.tsx'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { memoriesService } from '../services/memory.service.ts'
 import { Memory, MemoryLane } from '@prisma/client'
 import toast from 'react-hot-toast'
@@ -31,19 +31,19 @@ function MemoryPage({ slug }: Props) {
   )
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
-  useEffect(() => {
+  const fetchMemories = useCallback(async () => {
     if (!slug) return
 
-    const fetchMemories = async () => {
-      const { memories, memoryLane } =
-        await memoriesService.getByMemoryLaneSlug(slug)
+    const { memories, memoryLane } =
+      await memoriesService.getByMemoryLaneSlug(slug)
 
-      setMemoryLane(memoryLane)
-      setMemories(memories)
-    }
-
-    fetchMemories()
+    setMemoryLane(memoryLane)
+    setMemories(memories)
   }, [slug])
+
+  useEffect(() => {
+    fetchMemories()
+  }, [fetchMemories])
 
   const copyShareLink = () => {
     copyToClipboard(window.location.href)
@@ -63,9 +63,19 @@ function MemoryPage({ slug }: Props) {
     )
   }, [memories, memoriesSortOrder])
 
+  const onMemoryCreated = () => {
+    fetchMemories()
+    onOpenChange()
+  }
+
   return (
     <Container className='mt-20 space-y-16 mb-40'>
-      <CreateMemoryModal isOpen={isOpen} onOpenChange={onOpenChange} />
+      <CreateMemoryModal
+        slug={slug}
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onSuccess={onMemoryCreated}
+      />
       <div className='flex justify-between items-center'>
         <div className='flex items-center'>
           <AppLogo />

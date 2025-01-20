@@ -9,3 +9,5 @@ export const memorySchema = z.object({
   }),
   images: z.array(z.string()),
 })
+
+export type MemorySchema = z.infer<typeof memorySchema>;

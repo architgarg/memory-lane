@@ -17,7 +17,7 @@ class MemoriesService extends ApiClient {
     images: string[],
   ) {
     return this.post(MEMORIES, {
-      memoryLaneSlug,
+      memory_lane_slug: memoryLaneSlug,
       title,
       description,
       timestamp,
@@ -34,7 +34,7 @@ class MemoriesService extends ApiClient {
     images: string[],
   ) {
     return this.put(`${MEMORIES}/${id}`, {
-      memoryLaneSlug,
+      memory_lane_slug: memoryLaneSlug,
       title,
       description,
       timestamp,
