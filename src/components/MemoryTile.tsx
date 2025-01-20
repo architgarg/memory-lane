@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, CardFooter, CardHeader } from '@heroui/card'
 import { Image } from '@heroui/Image'
 import { Button } from '@heroui/button'
-import { Memory } from '../models/memory.ts'
+import { Memory } from '@prisma/client'
 
 interface Props {
   memory: Memory
@@ -10,10 +10,7 @@ interface Props {
 
 const MemoryTile: React.FC<Props> = ({ memory }) => {
   return (
-    <Card
-      isFooterBlurred
-      className='w-full h-[300px]'
-    >
+    <Card isFooterBlurred className='w-full h-[300px]'>
       <CardHeader className='absolute z-10 top-0 flex-col items-start bg-gradient-to-b from-black to-transparent'>
         <p className='text-tiny text-white/60 uppercase font-bold'>
           {new Date(memory.timestamp).toLocaleDateString()}
@@ -27,7 +24,9 @@ const MemoryTile: React.FC<Props> = ({ memory }) => {
         src={memory.images[0]}
       />
       <CardFooter className='absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600'>
-        <p className='text-tiny text-white/60'>{memory.description}</p>
+        <p className='text-tiny text-white/60 line-clamp-2'>
+          {memory.description}
+        </p>
         <Button radius='full' size='sm'>
           Show
         </Button>
