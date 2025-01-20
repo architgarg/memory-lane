@@ -1,5 +1,5 @@
 import ApiClient from './api-client.ts'
-import { MEMORIES } from '../constants/api-urls'
+import { MEMORIES } from '../constants/api-urls.ts'
 import { Memory, MemoryLane } from '@prisma/client'
 
 class MemoriesService extends ApiClient {

@@ -15,6 +15,7 @@ import { Fragment, useEffect, useMemo, useState } from 'react'
 import { memoriesService } from '../services/memory.service.ts'
 import { Memory, MemoryLane } from '@prisma/client'
 import toast from 'react-hot-toast'
+import { copyToClipboard } from '../utils.ts'
 
 interface Props {
   slug: string
@@ -42,8 +43,13 @@ function MemoryPage({ slug }: Props) {
   }, [slug])
 
   const copyShareLink = () => {
-    navigator.clipboard.writeText(window.location.href)
-    toast.success('Link copied to clipboard')
+    copyToClipboard(window.location.href)
+      .then(() => {
+        toast.success('Link copied to clipboard')
+      })
+      .catch(() => {
+        console.warn('Failed to copy')
+      })
   }
 
   const sortedMemories = useMemo(() => {

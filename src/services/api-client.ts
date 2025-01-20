@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
-import { BASEURL } from '../constants/api-urls'
+import { BASEURL } from '../constants/api-urls.ts'
 
 class ApiClient {
   protected client: AxiosInstance

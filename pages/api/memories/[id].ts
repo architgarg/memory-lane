@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
-import { memorySchema } from '../../../backend/schemas/memory.schema'
+import { memorySchema } from '../../../src/backend/schemas/memory.schema'
 
 const prisma = new PrismaClient()
 

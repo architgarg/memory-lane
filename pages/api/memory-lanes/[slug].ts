@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
-import { memoryLaneSchema } from '../../../backend/schemas/memory-lane.schema'
+import { memoryLaneSchema } from '../../../src/backend/schemas/memory-lane.schema'
 
 const prisma = new PrismaClient()
 

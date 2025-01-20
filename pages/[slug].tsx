@@ -1,5 +1,5 @@
 import React from 'react'
-import MemoryPage from '../components/MemoryPage.tsx'
+import MemoryPage from '../src/components/MemoryPage.tsx'
 import { useRouter } from 'next/router'
 
 const Main = () => {

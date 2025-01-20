@@ -1,5 +1,5 @@
 import { AppProps } from 'next/app'
-import '../styles/index.css'
+import '../src/styles/index.css'
 import { Toaster } from 'react-hot-toast'
 
 function MyApp({ Component, pageProps }: AppProps) {
