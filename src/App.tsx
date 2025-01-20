@@ -13,21 +13,19 @@ import { Select, SelectItem } from '@heroui/select'
 import { Button } from '@heroui/button'
 import MemoryTile from './components/MemoryTile.tsx'
 import { useEffect, useState } from 'react'
-import { memoryLanesService } from './services/memory-lane.service.ts'
 import { memoriesService } from './services/memory.service.ts'
-import { Memory } from './models/memory.ts'
-import { MemoryLane } from './models/memory-lane.ts'
+import { Memory, MemoryLane } from '@prisma/client'
 
 function App() {
   const [memories, setMemories] = useState<Memory[]>([])
   const [memoryLane, setMemoryLane] = useState<MemoryLane>()
 
-  const memoryLaneId = '1'
+  const memoryLaneSlug = 'archit'
 
   useEffect(() => {
     const fetchMemories = async () => {
-      const { memoryLane } = await memoryLanesService.getById(memoryLaneId)
-      const { memories } = await memoriesService.getByMemoryLaneId(memoryLaneId)
+      const { memories, memoryLane } =
+        await memoriesService.getByMemoryLaneSlug(memoryLaneSlug)
 
       setMemoryLane(memoryLane)
       setMemories(memories)
