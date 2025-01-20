@@ -4,11 +4,10 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-
     "migrate:dev": "npx prisma migrate dev",
     "db:generate": "npx prisma generate",
     "serve:api": "nodemon backend/api.js"
@@ -30,6 +29,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "framer-motion": "^11.18.1",
+    "next": "^15.1.5",
     "prettier": "^3.4.2",
     "prisma": "^6.2.1",
     "react": "^18.2.0",
@@ -38,6 +38,7 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/node": "22.10.7",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
