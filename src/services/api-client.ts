@@ -1,5 +1,9 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios'
 import { BASEURL } from '../constants/api-urls.ts'
+
+interface ErrorResponse {
+  error: string
+}
 
 class ApiClient {
   protected client: AxiosInstance
@@ -11,6 +15,15 @@ class ApiClient {
         'Content-Type': 'application/json',
       },
     })
+
+    this.client.interceptors.response.use(
+      (response) => response,
+      (error: AxiosError) => {
+        const errorMessage =
+          (error.response?.data as ErrorResponse)?.error ?? 'An error occurred'
+        return Promise.reject(new Error(errorMessage))
+      },
+    )
   }
 
   protected async get<T>(url: string): Promise<T> {

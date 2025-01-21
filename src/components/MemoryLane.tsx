@@ -15,8 +15,8 @@ import { Modal, ModalBody, ModalContent, useDisclosure } from '@heroui/react'
 import CreateMemoryModal from './CreateMemoryModal.tsx'
 import { useMemories } from '../hooks/useMemories.tsx'
 import MemoryDetails from './MemoryDetails.tsx'
-import { MemorySchema } from '../schemas/memory.schema.ts'
 import CreateMemoryLaneModal from './CreateMemoryLaneModal.tsx'
+import { MemorySchema } from '../schemas/memory.schema.ts'
 
 interface Props {
   slug: string

@@ -1,10 +1,10 @@
 import {
   Button,
+  Form,
   Input,
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   Textarea,
   useDisclosure,
@@ -13,6 +13,7 @@ import React, { ChangeEvent, useState } from 'react'
 import { memoryLanesService } from '../services/memory-lane.service.ts'
 import { useRouter } from 'next/router'
 import { textToSlug } from '../utils.ts'
+import toast from 'react-hot-toast'
 
 interface FormData {
   name: string
@@ -44,11 +45,20 @@ export default function CreateMemoryModal({}: Props) {
   const handleCreateMemoryLane = async (onClose: () => void) => {
     if (loading) return
 
-    await memoryLanesService.create(data.name, data.slug, data.description)
-    await router.push(`/${data.slug}`)
+    try {
+      setLoading(true)
+      await memoryLanesService.create(data.name, data.slug, data.description)
+      await router.push(`/${data.slug}`)
 
-    setLoading(false)
-    onClose()
+      onClose()
+    } catch (e) {
+      const errorMessage =
+        e instanceof Error ? e.message : 'Failed to create memory lane'
+
+      toast.error(errorMessage)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -84,52 +94,62 @@ export default function CreateMemoryModal({}: Props) {
                 Create a new Lane
               </ModalHeader>
               <ModalBody>
-                <Input
-                  name='name'
-                  label='Name'
-                  placeholder='Enter your first name'
-                  variant='bordered'
-                  value={data.name}
-                  onChange={(e) => {
-                    const name = e.target.value
-                    const slug = textToSlug(name)
-
-                    setData((oldData) => ({
-                      ...oldData,
-                      name,
-                      slug,
-                    }))
-                  }}
-                />
-                <Input
-                  name='slug'
-                  label='Slug'
-                  placeholder='Enter your first name'
-                  variant='bordered'
-                  value={data.slug}
-                  onChange={onChangeHandler}
-                  description={`Your url will look like: https://planned.com/${data.slug}`}
-                />
-                <Textarea
-                  name='description'
-                  label='Description'
-                  placeholder='Enter your memory description'
-                  variant='bordered'
-                  value={data.description}
-                  onChange={onChangeHandler}
-                />
-              </ModalBody>
-              <ModalFooter>
-                <Button
-                  color='primary'
-                  onPress={() => {
+                <Form
+                  onSubmit={(e) => {
+                    e.preventDefault()
                     handleCreateMemoryLane(onClose)
                   }}
-                  disabled={loading}
+                  validationBehavior='native'
                 >
-                  {loading ? 'Creating...' : 'Create'}
-                </Button>
-              </ModalFooter>
+                  <Input
+                    isRequired
+                    name='name'
+                    label='Name'
+                    placeholder='Enter your first name'
+                    variant='bordered'
+                    value={data.name}
+                    onChange={(e) => {
+                      const name = e.target.value
+                      const slug = textToSlug(name)
+
+                      setData((oldData) => ({
+                        ...oldData,
+                        name,
+                        slug,
+                      }))
+                    }}
+                  />
+                  <Input
+                    isRequired
+                    name='slug'
+                    label='Slug'
+                    placeholder='Enter your first name'
+                    variant='bordered'
+                    value={data.slug}
+                    onChange={onChangeHandler}
+                    description={`Your url will look like: https://planned.com/${data.slug}`}
+                  />
+                  <Textarea
+                    isRequired
+                    name='description'
+                    label='Description'
+                    placeholder='Enter your memory description'
+                    variant='bordered'
+                    value={data.description}
+                    onChange={onChangeHandler}
+                  />
+
+                  <div className="ml-auto mb-6">
+                    <Button
+                      color='primary'
+                      disabled={loading}
+                      type='submit'
+                    >
+                      {loading ? 'Creating...' : 'Create'}
+                    </Button>
+                  </div>
+                </Form>
+              </ModalBody>
             </>
           )}
         </ModalContent>

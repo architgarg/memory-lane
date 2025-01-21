@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import { memoryLaneSchema } from '../../../src/schemas/memory-lane.schema'
 
 const prisma = new PrismaClient()
@@ -16,11 +16,16 @@ export default async function handler(
       })
       res.status(201).json({ memoryLane })
     } catch (error: unknown) {
-      res
-        .status(400)
-        .json({
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        res.status(409).json({ error: 'Slug already exists' })
+      } else {
+        res.status(400).json({
           error: error instanceof Error ? error.message : 'An error occurred',
         })
+      }
     }
   } else {
     res.setHeader('Allow', ['POST'])
