@@ -1,5 +1,9 @@
 # Solutions to Planned Coding Challenge: Memory Lane
 
+### Demo Video
+
+![Demo Video](demo.mp4)
+
 ### Solution Overview
 
 This solution is a web application that allows users to create a memory lane and share it with friends and family. A memory lane is a collection of memories that happened in chronological order.
