@@ -38,7 +38,7 @@ npm install
 
 # Prepare DB and run migrations
 npm run db:generate
-npm run migrate:dev
+npm run db:migrate:dev
 
 # Run the app
 npm run dev

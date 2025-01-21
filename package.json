@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "migrate:dev": "npx prisma migrate dev",
+    "db:migrate:dev": "npx prisma migrate dev",
     "db:generate": "npx prisma generate"
   },
   "prisma": {
