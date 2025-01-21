@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react'
 import Card from './shared/Card.tsx'
-import H1 from './shared/H1.tsx'
 import AppLogo from './shared/AppLogo.tsx'
 import Container from './shared/Container.tsx'
 import {
@@ -39,7 +38,7 @@ function MemoryLane({ slug }: Props) {
   if (!memoryLane) return null
 
   return (
-    <Container className='mt-20 space-y-16 mb-40'>
+    <Container className='pt-20 space-y-10 pb-40'>
       <CreateMemoryModal
         slug={slug}
         isOpen={isOpen}
@@ -56,7 +55,7 @@ function MemoryLane({ slug }: Props) {
       >
         <ModalContent>
           {(onClose) => (
-            <ModalBody className="!p-0">
+            <ModalBody className='!p-0'>
               <MemoryDetails
                 onBack={onClose}
                 memoryLane={memoryLane}
@@ -68,15 +67,19 @@ function MemoryLane({ slug }: Props) {
       </Modal>
 
       <div className='flex justify-between items-center'>
-        <div className='flex items-center'>
+        <div className='flex items-center space-x-4'>
           <AppLogo />
-          <H1>{memoryLane?.user_name}'s Memory lane</H1>
+          <h1 className='font-display text-5xl'>
+            {memoryLane?.user_name}'s Memory lane
+          </h1>
         </div>
 
         <IconButton icon={ShareIcon} onClick={copyShareLink} />
       </div>
 
-      <Card>{memoryLane?.description}</Card>
+      <div className='shadow bg-white rounded-lg py-4 px-8'>
+        {memoryLane?.description}
+      </div>
 
       <div className='flex items-center justify-between'>
         <Select
@@ -87,6 +90,9 @@ function MemoryLane({ slug }: Props) {
           }
           aria-label='Sort memories'
           defaultSelectedKeys={[memoriesSortOrder]}
+          classNames={{
+            trigger: 'bg-white',
+          }}
         >
           <SelectItem key='asc'>Older to new</SelectItem>
           <SelectItem key='desc'>New to older</SelectItem>
@@ -96,6 +102,7 @@ function MemoryLane({ slug }: Props) {
           variant='bordered'
           startContent={<PlusIcon className='h-6 w-6' />}
           onPress={onOpen}
+          className='bg-white'
         >
           New memory
         </Button>
