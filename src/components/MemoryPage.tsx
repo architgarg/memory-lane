@@ -23,13 +23,8 @@ interface Props {
 }
 
 function MemoryPage({ slug }: Props) {
-  const {
-    memories,
-    memoryLane,
-    memoriesSortOrder,
-    setMemoriesSortOrder,
-    fetchMemories,
-  } = useMemories(slug)
+  const { memories, memoryLane, memoriesSortOrder, setMemoriesSortOrder } =
+    useMemories(slug)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   const copyShareLink = () => {
@@ -38,18 +33,12 @@ function MemoryPage({ slug }: Props) {
       .catch(() => console.warn('Failed to copy'))
   }
 
-  const onMemoryCreated = () => {
-    fetchMemories()
-    onOpenChange()
-  }
-
   return (
     <Container className='mt-20 space-y-16 mb-40'>
       <CreateMemoryModal
         slug={slug}
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        onSuccess={onMemoryCreated}
       />
       <div className='flex justify-between items-center'>
         <div className='flex items-center'>

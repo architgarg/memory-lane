@@ -7,7 +7,7 @@ export const useMemories = (slug: string) => {
     'desc',
   )
 
-  const { data, refetch: fetchMemories } = useQuery(
+  const { data } = useQuery(
     ['memories', slug],
     () => memoriesService.getByMemoryLaneSlug(slug),
     {
@@ -31,6 +31,5 @@ export const useMemories = (slug: string) => {
     memoryLane,
     memoriesSortOrder,
     setMemoriesSortOrder,
-    fetchMemories,
   }
 }

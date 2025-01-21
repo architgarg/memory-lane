@@ -12,8 +12,7 @@ import {
   Textarea,
 } from '@heroui/react'
 import { ChangeEvent, useMemo, useState } from 'react'
-import { memoriesService } from '../services/memory.service.ts'
-import { imageUploadService } from '../services/file.service.ts'
+import { useCreateMemory } from '../hooks/useCreateMemory.tsx'
 
 interface FormData {
   title: string
@@ -25,22 +24,20 @@ interface Props {
   slug: string
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void
-  onSuccess: () => void
 }
 
 export default function CreateMemoryModal({
   slug,
   isOpen,
   onOpenChange,
-  onSuccess,
 }: Props) {
   const [data, setData] = useState<FormData>({
     title: '',
     description: '',
     timestamp: '',
   })
-  const [uploading, setUploading] = useState<boolean>(false)
   const [pickedImageFiles, setPickedImageFiles] = useState<File[]>([])
+  const { mutateAsync: createMemory, isLoading: uploading } = useCreateMemory()
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
@@ -63,28 +60,16 @@ export default function CreateMemoryModal({
     }))
   }
 
-  const createMemory = async () => {
+  const handleCreateMemory = async (onClose: () => void) => {
     if (uploading) return
-
-    setUploading(true)
-    const uploadedImageUrls = await Promise.all(
-      pickedImageFiles.map(async (file) => {
-        return imageUploadService.upload(file)
-      }),
-    ).finally(() => {
-      setUploading(false)
-    })
-
-    await memoriesService.createMemory(
+    await createMemory({
       slug,
-      data.title,
-      data.description,
-      data.timestamp,
-      uploadedImageUrls,
-    )
-
-    onSuccess()
-    onOpenChange(false)
+      title: data.title,
+      description: data.description,
+      timestamp: data.timestamp,
+      pickedImageFiles,
+    })
+    onClose()
   }
 
   return (
@@ -97,7 +82,7 @@ export default function CreateMemoryModal({
         onOpenChange={onOpenChange}
       >
         <ModalContent>
-          {() => (
+          {(onClose) => (
             <>
               <ModalHeader className='flex flex-col gap-1'>
                 Create a new Memory
@@ -174,7 +159,9 @@ export default function CreateMemoryModal({
               <ModalFooter>
                 <Button
                   color='primary'
-                  onPress={createMemory}
+                  onPress={() => {
+                    handleCreateMemory(onClose)
+                  }}
                   disabled={uploading}
                 >
                   {uploading ? 'Uploading images...' : 'Create memory'}
