@@ -12,6 +12,7 @@ import {
 import React, { ChangeEvent, useState } from 'react'
 import { memoryLanesService } from '../services/memory-lane.service.ts'
 import { useRouter } from 'next/router'
+import { textToSlug } from '../utils.ts'
 
 interface FormData {
   name: string
@@ -89,7 +90,16 @@ export default function CreateMemoryModal({}: Props) {
                   placeholder='Enter your first name'
                   variant='bordered'
                   value={data.name}
-                  onChange={onChangeHandler}
+                  onChange={(e) => {
+                    const name = e.target.value
+                    const slug = textToSlug(name)
+
+                    setData((oldData) => ({
+                      ...oldData,
+                      name,
+                      slug,
+                    }))
+                  }}
                 />
                 <Input
                   name='slug'
@@ -98,6 +108,7 @@ export default function CreateMemoryModal({}: Props) {
                   variant='bordered'
                   value={data.slug}
                   onChange={onChangeHandler}
+                  description={`Your url will look like: https://planned.com/${data.slug}`}
                 />
                 <Textarea
                   name='description'
