@@ -44,6 +44,8 @@ npm run db:migrate:dev
 npm run dev
 ```
 
+Open [http://localhost:3000/archit](http://localhost:3000/archit) with your browser to see the result.
+
 ### Future Improvements
 
 - Implement authentication and authorization to secure the app.
