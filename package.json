@@ -1,22 +1,44 @@
 {
   "name": "planned-memory-lane",
+  "type": "module",
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "serve:api": "nodemon api.js"
+    "db:migrate:dev": "npx prisma migrate dev",
+    "db:generate": "npx prisma generate"
+  },
+  "prisma": {
+    "schema": "src/backend/schema.prisma"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
+    "@heroui/react": "^2.6.14",
+    "@heroui/system": "^2.4.7",
+    "@heroui/theme": "^2.4.6",
+    "@prisma/client": "^6.2.1",
+    "axios": "^1.7.9",
+    "classnames": "^2.5.1",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
+    "formidable": "^3.5.2",
+    "framer-motion": "^11.18.1",
+    "next": "^15.1.5",
+    "prettier": "^3.4.2",
+    "prisma": "^6.2.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sqlite3": "^5.1.6"
+    "react-hot-toast": "^2.5.1",
+    "react-query": "^3.39.3",
+    "sqlite3": "^5.1.6",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@types/formidable": "^3.4.5",
+    "@types/node": "22.10.7",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
