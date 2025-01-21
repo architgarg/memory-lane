@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Card, CardFooter, CardHeader, Image } from '@heroui/react'
+import { Image } from '@heroui/react'
 import { MemorySchema } from '../schemas/memory.schema.ts'
 
 interface Props {
@@ -8,29 +8,41 @@ interface Props {
 
 const MemoryTile: React.FC<Props> = ({ memory }) => {
   return (
-    <Card isFooterBlurred className='w-full h-[300px] cursor-pointer'>
-      <CardHeader className='absolute z-10 top-0 flex-col items-start bg-gradient-to-b from-black to-transparent'>
-        <p className='text-tiny text-white/60 uppercase font-bold'>
-          {new Date(memory.timestamp).toLocaleDateString()}
-        </p>
-        <h4 className='text-white/90 font-medium text-xl'>{memory.title}</h4>
-      </CardHeader>
-      <Image
-        removeWrapper
-        isZoomed
-        alt='Memory Image'
-        className='z-0 w-full h-full object-cover'
-        src={memory.images[0]}
-      />
-      <CardFooter className='absolute bg-black/40 bottom-0 z-10 border-t-1 border-default-600 flex gap-4 justify-between'>
-        <p className='text-tiny text-white/90 line-clamp-2'>
-          {memory.description}
-        </p>
-        <Button radius='full' size='sm' color='primary'>
-          View
-        </Button>
-      </CardFooter>
-    </Card>
+    <div className='flex flex-col w-full shadow-lg bg-white rounded-xl p-6 min-h-[100px] cursor-pointer hover:shadow-md transition-all hover:scale-[1.01]'>
+      <div>
+        <p className='font-display text-3xl flex-1'>{memory.title}</p>
+        <p className='text-sm line-clamp-2 mt-2'>{memory.description}</p>
+      </div>
+
+      <div className='flex justify-between items-end w-full mt-6'>
+        <div className='flex gap-2'>
+          <div className='rounded-full border text-xs px-2 py-1'>
+            {new Date(memory.timestamp).toDateString()}
+          </div>
+          <div className='rounded-full border text-xs px-2 py-1'>
+            {memory.images.length} pictures
+          </div>
+        </div>
+
+        <div className='flex gap-2'>
+          {memory.images.slice(0, 2).map((image, index) => (
+            <Image
+              key={index}
+              alt={`Memory Image ${index}`}
+              className='object-cover w-12 h-12'
+              src={image}
+            />
+          ))}
+          {memory.images.length > 2 && (
+            <div className='flex items-center justify-center rounded-2xl'>
+              <span className='text-sm text-gray-600'>
+                +{memory.images.length - 2}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   )
 }
 
