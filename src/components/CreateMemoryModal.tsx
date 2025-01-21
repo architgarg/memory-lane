@@ -1,13 +1,13 @@
-import { PlusIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import { XMarkIcon } from '@heroicons/react/20/solid'
 import {
   Button,
   DatePicker,
+  Form,
   Image,
   Input,
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   Textarea,
 } from '@heroui/react'
@@ -88,85 +88,88 @@ export default function CreateMemoryModal({
                 Create a new Memory
               </ModalHeader>
               <ModalBody>
-                <Input
-                  name='title'
-                  label='Name'
-                  placeholder='Name your memory'
-                  variant='bordered'
-                  value={data.title}
-                  onChange={onChangeHandler}
-                />
-                <Textarea
-                  name='description'
-                  label='Description'
-                  placeholder='Enter your memory description'
-                  variant='bordered'
-                  value={data.description}
-                  onChange={onChangeHandler}
-                />
-                <DatePicker
-                  name='timestamp'
-                  label='Date'
-                  variant='bordered'
-                  onChange={(date) => {
-                    setData((oldData) => ({
-                      ...oldData,
-                      timestamp: date?.toDate('IST')?.toISOString() || '',
-                    }))
+                <Form
+                  onSubmit={(e) => {
+                    e.preventDefault()
+                    handleCreateMemory(onClose)
                   }}
-                />
+                  validationBehavior='native'
+                >
+                  <Input
+                    isRequired
+                    name='title'
+                    label='Name'
+                    placeholder='Name your memory'
+                    variant='bordered'
+                    value={data.title}
+                    onChange={onChangeHandler}
+                  />
+                  <Textarea
+                    isRequired
+                    name='description'
+                    label='Description'
+                    placeholder='Enter your memory description'
+                    variant='bordered'
+                    value={data.description}
+                    onChange={onChangeHandler}
+                  />
+                  <DatePicker
+                    isRequired
+                    name='timestamp'
+                    label='Date'
+                    variant='bordered'
+                    onChange={(date) => {
+                      setData((oldData) => ({
+                        ...oldData,
+                        timestamp: date?.toDate('IST')?.toISOString() || '',
+                      }))
+                    }}
+                  />
 
-                {previewImageUrls.length > 0 && (
-                  <div className='mt-2'>
-                    <label className='text-small text-foreground-700 mb-2 block'>
-                      Selected Images
-                    </label>
-                    <div className='grid grid-cols-4 gap-4'>
-                      {previewImageUrls.map((image, index) => (
-                        <div key={index} className='relative group'>
-                          <Image
-                            alt={`Image ${index + 1}`}
-                            src={image}
-                            height={100}
-                            className='rounded-lg w-full relative'
-                          />
-                          <button
-                            onClick={() => handleDeleteImage(index)}
-                            className='absolute -top-1 -right-1 bg-red-500 rounded-full p-1 z-10 group-hover:opacity-100 opacity-0 transition-opacity'
-                          >
-                            <XMarkIcon className='h-4 w-4 text-white' />
-                          </button>
-                        </div>
-                      ))}
+                  {previewImageUrls.length > 0 && (
+                    <div className='mt-2'>
+                      <label className='text-small text-foreground-700 mb-2 block'>
+                        Selected Images
+                      </label>
+                      <div className='grid grid-cols-4 gap-4'>
+                        {previewImageUrls.map((image, index) => (
+                          <div key={index} className='relative group'>
+                            <Image
+                              alt={`Image ${index + 1}`}
+                              src={image}
+                              height={100}
+                              className='rounded-lg w-full relative'
+                            />
+                            <button
+                              onClick={() => handleDeleteImage(index)}
+                              className='absolute -top-1 -right-1 bg-red-500 rounded-full p-1 z-10 group-hover:opacity-100 opacity-0 transition-opacity'
+                            >
+                              <XMarkIcon className='h-4 w-4 text-white' />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                <div className='duration-150 hover:border-default-400 border-default-200 border-medium focus-within:border-default-foreground focus-within:hover:border-default-foreground mt-4 rounded-lg cursor-pointer'>
-                  <label className='flex gap-2 justify-center items-center w-full text-small text-foreground-700 cursor-pointer p-4'>
-                    <PlusIcon className='h-6 w-6 text-default-500' />
-                    Pick memories from gallery
-                    <input
+                  <div className='mt-4 w-full'>
+                    <Input
+                      label='Pick memories from gallery'
                       type='file'
                       accept='image/*'
                       multiple
                       onChange={handleFileChange}
-                      className='hidden'
+                      isRequired
                     />
-                  </label>
-                </div>
+                  </div>
+
+                  <div className='ml-auto mb-4 mt-4'>
+                    <Button color='primary' type='submit' disabled={uploading}>
+                      {uploading ? 'Uploading images...' : 'Create memory'}
+                    </Button>
+                  </div>
+                </Form>
               </ModalBody>
-              <ModalFooter>
-                <Button
-                  color='primary'
-                  onPress={() => {
-                    handleCreateMemory(onClose)
-                  }}
-                  disabled={uploading}
-                >
-                  {uploading ? 'Uploading images...' : 'Create memory'}
-                </Button>
-              </ModalFooter>
             </>
           )}
         </ModalContent>
