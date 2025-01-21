@@ -1,10 +1,11 @@
 import ApiClient from './api-client.ts'
 import { MEMORIES } from '../constants/api-urls.ts'
-import { Memory, MemoryLane } from '@prisma/client'
+import { MemoryLane } from '@prisma/client'
+import { MemorySchema } from '../schemas/memory.schema.ts'
 
 class MemoriesService extends ApiClient {
   async getByMemoryLaneSlug(memoryLaneSlug: string) {
-    return this.get<{ memoryLane: MemoryLane; memories: Memory[] }>(
+    return this.get<{ memoryLane: MemoryLane; memories: MemorySchema[] }>(
       `${MEMORIES}/${memoryLaneSlug}`,
     )
   }

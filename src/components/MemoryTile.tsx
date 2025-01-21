@@ -1,9 +1,9 @@
 import React from 'react'
-import { Card, CardFooter, CardHeader, Image, Button } from '@heroui/react'
-import { Memory } from '@prisma/client'
+import { Button, Card, CardFooter, CardHeader, Image } from '@heroui/react'
+import { MemorySchema } from '../schemas/memory.schema.ts'
 
 interface Props {
-  memory: Memory
+  memory: MemorySchema
 }
 
 const MemoryTile: React.FC<Props> = ({ memory }) => {

@@ -1,12 +1,12 @@
 import React from 'react'
-import MemoryPage from '../src/components/MemoryPage.tsx'
 import { useRouter } from 'next/router'
+import MemoryLane from '../src/components/MemoryLane.tsx'
 
 const Main = () => {
   const router = useRouter()
   const { slug } = router.query
 
-  return <MemoryPage slug={slug as string} />
+  return <MemoryLane slug={slug as string} />
 }
 
 export default Main

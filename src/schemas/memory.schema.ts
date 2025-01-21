@@ -10,4 +10,4 @@ export const memorySchema = z.object({
   images: z.array(z.string()),
 })
 
-export type MemorySchema = z.infer<typeof memorySchema>;
+export type MemorySchema = z.infer<typeof memorySchema> & { id: string }

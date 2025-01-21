@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import Card from './shared/Card.tsx'
 import H1 from './shared/H1.tsx'
 import AppLogo from './shared/AppLogo.tsx'
@@ -14,24 +14,29 @@ import { Button } from '@heroui/button'
 import MemoryTile from './MemoryTile.tsx'
 import toast from 'react-hot-toast'
 import { copyToClipboard } from '../utils.ts'
-import { useDisclosure } from '@heroui/react'
+import { Modal, ModalBody, ModalContent, useDisclosure } from '@heroui/react'
 import CreateMemoryModal from './CreateMemoryModal.tsx'
 import { useMemories } from '../hooks/useMemories.tsx'
+import MemoryDetails from './MemoryDetails.tsx'
+import { MemorySchema } from '../schemas/memory.schema.ts'
 
 interface Props {
   slug: string
 }
 
-function MemoryPage({ slug }: Props) {
+function MemoryLane({ slug }: Props) {
   const { memories, memoryLane, memoriesSortOrder, setMemoriesSortOrder } =
     useMemories(slug)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const [currentMemory, setCurrentMemory] = useState<MemorySchema | null>(null)
 
   const copyShareLink = () => {
     copyToClipboard(window.location.href)
       .then(() => toast.success('Link copied to clipboard'))
       .catch(() => console.warn('Failed to copy'))
   }
+
+  if (!memoryLane) return null
 
   return (
     <Container className='mt-20 space-y-16 mb-40'>
@@ -40,6 +45,28 @@ function MemoryPage({ slug }: Props) {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
       />
+
+      <Modal
+        isOpen={Boolean(currentMemory)}
+        size='full'
+        onClose={() => {
+          setCurrentMemory(null)
+        }}
+        scrollBehavior='outside'
+      >
+        <ModalContent>
+          {(onClose) => (
+            <ModalBody className="!p-0">
+              <MemoryDetails
+                onBack={onClose}
+                memoryLane={memoryLane}
+                memory={currentMemory}
+              />
+            </ModalBody>
+          )}
+        </ModalContent>
+      </Modal>
+
       <div className='flex justify-between items-center'>
         <div className='flex items-center'>
           <AppLogo />
@@ -77,7 +104,13 @@ function MemoryPage({ slug }: Props) {
       <div className='max-w-lg m-auto space-y-4'>
         {memories.map((memory, index) => (
           <Fragment key={memory.id}>
-            <MemoryTile memory={memory} />
+            <div
+              onClick={() => {
+                setCurrentMemory(memory)
+              }}
+            >
+              <MemoryTile memory={memory} />
+            </div>
             {index < memories.length - 1 && (
               <div className='flex justify-center items-center'>
                 <EllipsisVerticalIcon className='h-6 w-6 text-gray-500' />
@@ -90,4 +123,4 @@ function MemoryPage({ slug }: Props) {
   )
 }
 
-export default MemoryPage
+export default MemoryLane
