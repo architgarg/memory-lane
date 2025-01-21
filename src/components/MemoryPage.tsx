@@ -1,3 +1,4 @@
+import React, { Fragment } from 'react'
 import Card from './shared/Card.tsx'
 import H1 from './shared/H1.tsx'
 import AppLogo from './shared/AppLogo.tsx'
@@ -11,63 +12,31 @@ import IconButton from './shared/IconButton.tsx'
 import { Select, SelectItem } from '@heroui/select'
 import { Button } from '@heroui/button'
 import MemoryTile from './MemoryTile.tsx'
-import React, {
-  Fragment,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
-import { memoriesService } from '../services/memory.service.ts'
-import { Memory, MemoryLane } from '@prisma/client'
 import toast from 'react-hot-toast'
 import { copyToClipboard } from '../utils.ts'
 import { useDisclosure } from '@heroui/react'
 import CreateMemoryModal from './CreateMemoryModal.tsx'
+import { useMemories } from '../hooks/useMemories.tsx'
 
 interface Props {
   slug: string
 }
 
 function MemoryPage({ slug }: Props) {
-  const [memories, setMemories] = useState<Memory[]>([])
-  const [memoryLane, setMemoryLane] = useState<MemoryLane>()
-  const [memoriesSortOrder, setMemoriesSortOrder] = useState<'desc' | 'asc'>(
-    'desc',
-  )
+  const {
+    memories,
+    memoryLane,
+    memoriesSortOrder,
+    setMemoriesSortOrder,
+    fetchMemories,
+  } = useMemories(slug)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-
-  const fetchMemories = useCallback(async () => {
-    if (!slug) return
-
-    const { memories, memoryLane } =
-      await memoriesService.getByMemoryLaneSlug(slug)
-
-    setMemoryLane(memoryLane)
-    setMemories(memories)
-  }, [slug])
-
-  useEffect(() => {
-    fetchMemories()
-  }, [fetchMemories])
 
   const copyShareLink = () => {
     copyToClipboard(window.location.href)
-      .then(() => {
-        toast.success('Link copied to clipboard')
-      })
-      .catch(() => {
-        console.warn('Failed to copy')
-      })
+      .then(() => toast.success('Link copied to clipboard'))
+      .catch(() => console.warn('Failed to copy'))
   }
-
-  const sortedMemories = useMemo(() => {
-    return memories.sort(
-      (a, b) =>
-        (memoriesSortOrder === 'asc' ? 1 : -1) *
-        (new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()),
-    )
-  }, [memories, memoriesSortOrder])
 
   const onMemoryCreated = () => {
     fetchMemories()
@@ -117,7 +86,7 @@ function MemoryPage({ slug }: Props) {
       </div>
 
       <div className='max-w-lg m-auto space-y-4'>
-        {sortedMemories.map((memory, index) => (
+        {memories.map((memory, index) => (
           <Fragment key={memory.id}>
             <MemoryTile memory={memory} />
             {index < memories.length - 1 && (
