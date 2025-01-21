@@ -6,7 +6,6 @@ import {
   PlusIcon,
   ShareIcon,
 } from '@heroicons/react/20/solid'
-import IconButton from './shared/IconButton.tsx'
 import { Select, SelectItem } from '@heroui/select'
 import { Button } from '@heroui/button'
 import MemoryTile from './MemoryTile.tsx'
@@ -73,7 +72,14 @@ function MemoryLane({ slug }: Props) {
           </h1>
         </div>
 
-        <IconButton icon={ShareIcon} onClick={copyShareLink} />
+        <Button
+          isIconOnly
+          size='md'
+          className='bg-white shadow'
+          onPress={copyShareLink}
+        >
+          <ShareIcon className='w-5 h-5 text-primary' />
+        </Button>
       </div>
 
       <div className='shadow bg-white rounded-lg py-4 px-8'>
