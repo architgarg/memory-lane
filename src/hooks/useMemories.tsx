@@ -12,6 +12,12 @@ export const useMemories = (slug: string) => {
     () => memoriesService.getByMemoryLaneSlug(slug),
     {
       enabled: !!slug,
+      onError: (error) => {
+        console.error(error)
+      },
+      onSuccess: (data) => {
+        console.log('data', data)
+      }
     },
   )
 
