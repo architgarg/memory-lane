@@ -21,9 +21,7 @@ interface FormData {
   slug: string
 }
 
-interface Props {}
-
-export default function CreateMemoryModal({}: Props) {
+export default function CreateMemoryModal() {
   const router = useRouter()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
