@@ -10,12 +10,12 @@ const MemoryTile: React.FC<Props> = ({ memory }) => {
   return (
     <div className='flex flex-col w-full shadow-lg bg-white rounded-xl p-6 min-h-[100px] cursor-pointer hover:shadow-md transition-all hover:scale-[1.01]'>
       <div>
-        <p className='font-display text-3xl flex-1'>{memory.title}</p>
+        <p className='font-display text-2xl sm:text-3xl flex-1'>{memory.title}</p>
         <p className='text-sm line-clamp-2 mt-2'>{memory.description}</p>
       </div>
 
       <div className='flex justify-between items-end w-full mt-6'>
-        <div className='flex gap-2'>
+        <div className='flex gap-2 flex-col sm:flex-row justify-start items-start'>
           <div className='rounded-full border text-xs px-2 py-1'>
             {new Date(memory.timestamp).toDateString()}
           </div>

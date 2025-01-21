@@ -67,7 +67,7 @@ function MemoryLane({ slug }: Props) {
       <div className='flex justify-between items-center'>
         <div className='flex items-center space-x-4'>
           <AppLogo />
-          <h1 className='font-display text-5xl'>
+          <h1 className='font-display text-3xl md:text-5xl'>
             {memoryLane?.user_name}'s Memory lane
           </h1>
         </div>
@@ -86,7 +86,7 @@ function MemoryLane({ slug }: Props) {
         {memoryLane?.description}
       </div>
 
-      <div className='flex items-center justify-between'>
+      <div className='flex items-center justify-between gap-2'>
         <Select
           className='max-w-[200px]'
           variant='bordered'
