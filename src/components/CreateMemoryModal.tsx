@@ -11,7 +11,7 @@ import {
   ModalHeader,
   Textarea,
 } from '@heroui/react'
-import { ChangeEvent, useMemo, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { useCreateMemory } from '../hooks/useCreateMemory.tsx'
 
 interface FormData {
@@ -38,6 +38,17 @@ export default function CreateMemoryModal({
   })
   const [pickedImageFiles, setPickedImageFiles] = useState<File[]>([])
   const { mutateAsync: createMemory, isLoading: uploading } = useCreateMemory()
+
+  useEffect(() => {
+    if (!isOpen) {
+      setData({
+        title: '',
+        description: '',
+        timestamp: '',
+      })
+      setPickedImageFiles([])
+    }
+  }, [isOpen])
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
