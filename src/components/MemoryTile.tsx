@@ -8,7 +8,7 @@ interface Props {
 
 const MemoryTile: React.FC<Props> = ({ memory }) => {
   return (
-    <Card isFooterBlurred className='w-full h-[300px]'>
+    <Card isFooterBlurred className='w-full h-[300px] cursor-pointer'>
       <CardHeader className='absolute z-10 top-0 flex-col items-start bg-gradient-to-b from-black to-transparent'>
         <p className='text-tiny text-white/60 uppercase font-bold'>
           {new Date(memory.timestamp).toLocaleDateString()}
@@ -17,6 +17,7 @@ const MemoryTile: React.FC<Props> = ({ memory }) => {
       </CardHeader>
       <Image
         removeWrapper
+        isZoomed
         alt='Memory Image'
         className='z-0 w-full h-full object-cover'
         src={memory.images[0]}
