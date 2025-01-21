@@ -3,8 +3,8 @@ import { MEMORY_LANES } from '../constants/api-urls.ts'
 import { MemoryLane } from '@prisma/client'
 
 class MemoryLanesService extends ApiClient {
-  async create(user_name: string, slug: string, description: string) {
-    return this.post(MEMORY_LANES, { user_name, slug, description })
+  async create(name: string, slug: string, description: string) {
+    return this.post(MEMORY_LANES, { user_name: name, slug, description })
   }
 
   async update(slug: string, user_name: string, description: string) {

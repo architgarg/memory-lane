@@ -16,6 +16,7 @@ import CreateMemoryModal from './CreateMemoryModal.tsx'
 import { useMemories } from '../hooks/useMemories.tsx'
 import MemoryDetails from './MemoryDetails.tsx'
 import { MemorySchema } from '../schemas/memory.schema.ts'
+import CreateMemoryLaneModal from './CreateMemoryLaneModal.tsx'
 
 interface Props {
   slug: string
@@ -131,6 +132,8 @@ function MemoryLane({ slug }: Props) {
           </Fragment>
         ))}
       </div>
+
+      <CreateMemoryLaneModal />
     </Container>
   )
 }
