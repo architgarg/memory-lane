@@ -85,7 +85,7 @@ function MemoryLane({ slug }: Props) {
           className='max-w-[200px]'
           variant='bordered'
           onChange={(e) =>
-            setMemoriesSortOrder(e.target.value as unknown as 'desc' | 'asc')
+            setMemoriesSortOrder(e.target.value as 'desc' | 'asc')
           }
           aria-label='Sort memories'
           defaultSelectedKeys={[memoriesSortOrder]}

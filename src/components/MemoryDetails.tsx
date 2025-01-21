@@ -35,11 +35,11 @@ const MemoryDetails: React.FC<Props> = ({ memory, memoryLane, onBack }) => {
           <h1 className='text-5xl font-display text-center mt-10 text-kabul'>
             {memory.title}
           </h1>
-          <p className='text-sm text-center mt-4 text-kabul-600'>
-            {new Date(memory.timestamp).toISOString()}
+          <p className='text-md text-center mt-4 text-kabul-600'>
+            {new Date(memory.timestamp).toDateString()}
           </p>
-          <p className='text-md text-center mt-2 text-kabul-600'>
-            {memory.images.length} moments
+          <p className='text-sm text-center mt-2 text-kabul-600'>
+            {memory.images.length} pictures
           </p>
         </div>
 
@@ -49,7 +49,7 @@ const MemoryDetails: React.FC<Props> = ({ memory, memoryLane, onBack }) => {
               key={index}
               src={image}
               alt={`Image ${index}`}
-              className='w-full h-full object-cover'
+              className='w-full h-full object-cover shadow'
             />
           ))}
         </div>
